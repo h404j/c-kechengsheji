@@ -4,10 +4,10 @@
 #define MAX 1000
 struct gread
 {
-    int English; //é‘»è¾«??éŽ´æ„®å“—
-    int c;       //cç’‡?ç‘·â‚¬éŽ´æ„®å“—
-    int math;    //éæ¿?ï¸½åžšç¼?
-    int score;   //ç€›ï¸½æ¹¡éŽ¬è¯²åžŽ
+    int English; //è‹±è??æˆç»©
+    int c;       //cè¯?è¨€æˆç»©
+    int math;    //æ•°å?¦æˆç»?
+    int score;   //å­¦æœŸæ€»åˆ†
 };
 struct student
 {
@@ -24,74 +24,198 @@ struct manament
 };
 void initstu(struct manament *m);
 void addstu(struct manament *m);
+void updatestu(struct manament *m);
+void deletetu(struct manament *m);
+void findstu(struct manament *m);
+void findallstu(struct manament *m);
+void savestu(struct manament *m);
+
+void readstu(struct manament *m);
 void menu1()
 {
+    struct manament stu;
+    initstu(&stu);
+    // readstu(&stu);
     int flag = 1;
-    while (flag) //æ­»å¾ªçŽ¯ç¡®ä¿ç³»ç»Ÿä¸€ç›´è¿è¡Œï¼Œå½“é€€å‡ºç³»ç»Ÿæ—¶flag=1,è·³å‡ºå¾ªçŽ¯
+    while (flag) //ËÀÑ­»·È·±£ÏµÍ³Ò»Ö±ÔËÐÐ£¬µ±ÍË³öÏµÍ³Ê±flag=1,Ìø³öÑ­»·
     {
-        printf("----------------------å­¦ç”Ÿæˆç»©ç®¡ç†ç³»ç»Ÿ-----------------\n");
-        printf("------------------1:æ·»åŠ å­¦ç”Ÿæˆç»©-----------------------\n");
-        printf("------------------2:ä¿®æ”¹å­¦ç”Ÿæˆç»©-----------------------\n");
-        printf("------------------3ï¼šæŸ¥æ‰¾å­¦ç”Ÿæˆç»©----------------------\n");
-        printf("------------------4ï¼šæŸ¥çœ‹æ‰€æœ‰å­¦ç”Ÿæˆç»©-------------------\n");
-        printf("------------------5ï¼šåˆ é™¤å­¦ç”Ÿæˆç»©-----------------------\n");
-        printf("------------------6ï¼šé€€å‡ºç³»ç»Ÿ---------------------------\n");
+        printf("----------------------Ñ§Éú³É¼¨¹ÜÀíÏµÍ³-----------------\n");
+        printf("------------------1:Ìí¼ÓÑ§Éú³É¼¨-----------------------\n");
+        printf("------------------2:ÐÞ¸ÄÑ§Éú³É¼¨-----------------------\n");
+        printf("------------------3£º²éÕÒÑ§Éú³É¼¨----------------------\n");
+        printf("------------------4£º²é¿´ËùÓÐÑ§Éú³É¼¨-------------------\n");
+        printf("------------------5£ºÉ¾³ýÑ§Éú³É¼¨-----------------------\n");
+        printf("------------------6£ºÍË³öÏµÍ³---------------------------\n");
+        printf("ÇëÑ¡Ôñ²Ù×÷ÊýÀ´Íê³ÉÄãµÄ²Ù×÷£º");
         int a;
         scanf("%d", &a);
         switch (a)
         {
         case 1:
             system("CLS");
-            printf("æ·»åŠ å­¦ç”Ÿæˆç»©ï¼š");
+            addstu(&stu);
             break;
         case 2:
             /* code */
             system("CLS");
-            printf("ä¿®æ”¹å­¦ç”Ÿæˆç»©ï¼š");
+            printf("ÐÞ¸ÄÑ§Éú³É¼¨£º");
             break;
         case 3:
             system("CLS");
-            printf("æŸ¥æ‰¾å­¦ç”Ÿæˆç»©ï¼š\n");
+            printf("²éÕÒÑ§Éú³É¼¨£º\n");
             /* code */
             break;
         case 4:
             system("CLS");
-            printf("æŸ¥çœ‹æ‰€æœ‰å­¦ç”Ÿæˆç»©ï¼š\n");
+            printf("²é¿´ËùÓÐÑ§Éú³É¼¨£º\n");
             /* code */
             break;
         case 5:
             system("CLS");
-            printf("åˆ é™¤å­¦ç”Ÿæˆç»©ï¼š\n");
+            printf("É¾³ýÑ§Éú³É¼¨£º\n");
             /* code */
             break;
         case 6:
             system("CLS");
-            printf("è°¢è°¢ä½¿ç”¨ï¼Œæ¬¢è¿Žä¸‹æ¬¡å…‰ä¸´ï¼š");
+            printf("Ð»Ð»Ê¹ÓÃ£¬»¶Ó­ÏÂ´Î¹âÁÙ£º");
             flag = 0;
             break;
         default:
             system("CLS");
-            printf("è¾“å…¥é”™è¯¯ï¼Œè¯·é‡æ–°è¾“å…¥ï¼\n");
+            printf("ÊäÈë´íÎó£¬ÇëÖØÐÂÊäÈë£¡\n");
             break;
         }
     }
 }
 int main()
 {
-    //void addstu(&stu);
-     initstu(&stu);
+    // void addstu(&stu);
+    // initstu(&stu);
     menu1();
     system("pause");
     return 0;
 }
-// void initstu(struct manament *m)
+void initstu(struct manament *m)
+{
+    if (m->size == MAX)
+    {
+        return;
+    }
+    else
+    {
+        memset(m->me, 0, sizeof(m->me));
+    }
+    m->size=0;
+}
+void addstu(struct manament *m)
+{
+    printf("Ìí¼ÓÑ§Éú³É¼¨£º\n");
+    printf("ÇëÊäÈëÑ§ÉúÑ§ºÅ£º\n");
+    scanf("%d", &(m->me[m->size].id));
+    printf("ÇëÊäÈëÑ§ÉúÐÕÃû\n");
+    scanf("%s", m->me[m->size].name);
+    printf("ÇëÊäÈëÑ§ÉúµÄ°à¼¶£º\n");
+    scanf("%d", &(m->me[m->size].class));
+    printf("ÇëÊäÈë¿¼ÊÔÑ§ÆÚ£º\n");
+    scanf("%d", &(m->me[m->size].semter));
+    printf("ÇëÊäÈëÑ§ÉúµÄÓ¢Óï³É¼¨£º\n");
+    scanf("%d", &(m->me[m->size].stugread.English));
+    printf("ÇëÊäÈëÑ§ÉúµÄÊýÑ§³É¼¨£º\n");
+    scanf("%d", &(m->me[m->size].stugread.math));
+    printf("ÇëÊäÈëÑ§ÉúµÄcÓïÑÔ³É¼¨£º\n");
+    scanf("%d", &(m->me[m->size].stugread.c));
+    m->me[m->size].stugread.score = m->me[m->size].stugread.c + m->me[m->size].stugread.math + m->me[m->size].stugread.English;
+    savestu(m);
+    m->size++;
+    system("CLS");
+    printf("Ìí¼Ó³É¹¦\n");
+}
+void updatestu(struct manament *m)
+{
+}
+void deletestu(struct manament *m)
+{
+}
+void findstu(struct manament *m)
+{
+}
+void findallstu(struct manament *m)
+{
+}
+void savestu(struct manament *m)
+{
+    FILE *fp;
+    if (m->size == 0)
+    {
+        if ((fp = fopen("managent.txt", "w")) == NULL)
+        {
+            printf("ÎÄ¼þ´ò¿ªÊ§°Ü");
+            exit(0);
+        }
+    }
+    else
+    {
+        if ((fp = fopen("managent.txt", "a")) == NULL)
+        {
+            printf("ÎÄ¼þ´ò¿ªÊ§°Ü");
+            exit(0);
+        }
+    }
+    fprintf(fp, "%d %s %d %d %d %d %d %d\n", m->me[m->size].id, m->me[m->size].name, m->me[m->size].class, m->me[m->size].semter, m->me[m->size].stugread.English, m->me[m->size].stugread.math, m->me[m->size].stugread.c, m->me[m->size].stugread.score);
+    if (fclose(fp))
+    {
+        printf("ÎÄ¼þ¹Ø±ÕÊ§°Ü£¬");
+        exit(0);
+    }
+}
+void readstu(struct manament *m)
+{
+    FILE *fp;
+    if ((fp = fopen("managent.txt", "r")) == NULL)
+    {
+        printf("ÎÄ¼þ´ò¿ªÊ§°Ü");
+        exit(0);
+    }
+    while (fscanf(fp, "%d %s %d %d %d %d %d %d", &(m->me[m->size].id), m->me[m->size].name, &(m->me[m->size].class), &(m->me[m->size].semter), &(m->me[m->size].stugread.English), &(m->me[m->size].stugread.math), &(m->me[m->size].stugread.c), &(m->me[m->size].stugread.score)) > 0)
+    {
+        m->size++;
+    }
+
+    if (fclose(fp))
+    {
+        printf("ÎÄ¼þ¹Ø±ÕÊ§°Ü£¬");
+        exit(0);
+    }
+}
+// void readstu(struct manament *m)
 // {
-//     if (m->size == MAX)
+//     FILE *fp;
+//         if ((fp = fopen("managent.txt", "r")) == NULL)
+//         {
+//             printf("ÎÄ¼þ´ò¿ªÊ§°Ü");
+//             exit(0);
+//         }
+//     // fprintf(fp, "%d %s %d %d %d %d %d %d", m->me[m->size].id, m->me[m->size].name, m->me[m->size].class, m->me[m->size].semter, m->me[m->size].stugread.English, m->me[m->size].stugread.math, m->me[m->size].stugread.c, m->me[m->size].stugread.score);
+//     fread(m,sizeof(m),1,fp);
+//     if (fclose(fp))
 //     {
-//         return;
+//         printf("ÎÄ¼þ¹Ø±ÕÊ§°Ü£¬");
+//         exit(0);
 //     }
-//     else
+// }
+// void exitsavestu(struct manament *m)
+// {
+//     FILE *fp;
+//     if ((fp = fopen("managent.txt", "w")) == NULL)
 //     {
-//         memset(m->me, 0, sizeof(m->me));
+//         printf("ÎÄ¼þ´ò¿ªÊ§°Ü");
+//         exit(0);
+//     }
+//     // fprintf(fp, "%d %s %d %d %d %d %d %d", m->me[m->size].id, m->me[m->size].name, m->me[m->size].class, m->me[m->size].semter, m->me[m->size].stugread.English, m->me[m->size].stugread.math, m->me[m->size].stugread.c, m->me[m->size].stugread.score);
+//     fwrite(m, sizeof(m), 1, fp);
+//     if (fclose(fp))
+//     {
+//         printf("ÎÄ¼þ¹Ø±ÕÊ§°Ü£¬");
+//         exit(0);
 //     }
 // }
