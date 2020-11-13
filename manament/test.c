@@ -23,19 +23,20 @@ struct manament
     int size;
 };
 void initstu(struct manament *m);
+void save(struct manament *m);
+void findstu(struct manament *m, int id);
 void addstu(struct manament *m);
 void updatestu(struct manament *m);
-void deletetu(struct manament *m);
-void findstu(struct manament *m);
+int deletestu(struct manament *m, int id);
 void findallstu(struct manament *m);
 void savestu(struct manament *m);
-
 void readstu(struct manament *m);
 void menu1()
 {
-    struct manament stu;
+    int id = 0;
+    struct manament stu, *st;
     initstu(&stu);
-    // readstu(&stu);
+    readstu(&stu);
     int flag = 1;
     while (flag) //死循环确保系统一直运行，当退出系统时flag=1,跳出循环
     {
@@ -63,7 +64,10 @@ void menu1()
         case 3:
             system("CLS");
             printf("查找学生成绩：\n");
-            /* code */
+            printf("请输入所要删除的学生id: ");
+            scanf("%d", &id);
+            findstu(&stu,id);
+            id = 0;
             break;
         case 4:
             system("CLS");
@@ -73,6 +77,17 @@ void menu1()
         case 5:
             system("CLS");
             printf("删除学生成绩：\n");
+            printf("请输入所要删除的学生id: ");
+            scanf("%d", &id);
+            if (deletestu(&stu, id))
+            {
+                printf("删除成功\n");
+            }
+            else
+            {
+                printf("查无此人\n");
+            }
+            id = 0;
             /* code */
             break;
         case 6:
@@ -105,7 +120,7 @@ void initstu(struct manament *m)
     {
         memset(m->me, 0, sizeof(m->me));
     }
-    m->size=0;
+    m->size = 0;
 }
 void addstu(struct manament *m)
 {
@@ -113,31 +128,70 @@ void addstu(struct manament *m)
     printf("请输入学生学号：\n");
     scanf("%d", &(m->me[m->size].id));
     printf("请输入学生姓名\n");
-    scanf("%s", m->me[m->size].name);
+    scanf("%s", m->me[m->size].name); //姓名
     printf("请输入学生的班级：\n");
     scanf("%d", &(m->me[m->size].class));
     printf("请输入考试学期：\n");
-    scanf("%d", &(m->me[m->size].semter));
+    scanf("%d", &(m->me[m->size].semter)); //学期
     printf("请输入学生的英语成绩：\n");
-    scanf("%d", &(m->me[m->size].stugread.English));
+    scanf("%d", &(m->me[m->size].stugread.English)); //英语成绩
     printf("请输入学生的数学成绩：\n");
-    scanf("%d", &(m->me[m->size].stugread.math));
+    scanf("%d", &(m->me[m->size].stugread.math)); //数学成绩
     printf("请输入学生的c语言成绩：\n");
     scanf("%d", &(m->me[m->size].stugread.c));
-    m->me[m->size].stugread.score = m->me[m->size].stugread.c + m->me[m->size].stugread.math + m->me[m->size].stugread.English;
+    m->me[m->size].stugread.score = m->me[m->size].stugread.c + m->me[m->size].stugread.math + m->me[m->size].stugread.English; //计算总分
     savestu(m);
     m->size++;
-    system("CLS");
+    system("CLS"); //清空输出
     printf("添加成功\n");
 }
 void updatestu(struct manament *m)
 {
 }
-void deletestu(struct manament *m)
+int deletestu(struct manament *m, int id)
 {
+    int j = -1;
+    for (int i = 0; i < m->size; i++)
+    {
+        if (m->me[i].id == id)
+        {
+            j = i;
+            break;
+        }
+    }
+    if (j != -1)
+    {
+        for (j; j < m->size; j++)
+        {
+            m->me[j] = m->me[j + 1];
+        }
+        m->size--;
+        save(m);
+        return 1;
+    }
+    return 0;
 }
-void findstu(struct manament *m)
+void findstu(struct manament *m, int id)
 {
+    int j = -1;
+    for (int i = 0; i < m->size; i++)
+    {
+        if (m->me[i].id == id)
+        {
+            j = i;
+            break;
+        }
+    }
+    if (j!=-1)
+    {
+        printf("学号：%-4d 性名：%-4s 班级：%-3d 学期%-3d 英语%-3d 数学%-3d c语言：%-3d 总分：%-3d\n ", m->me[j].id, m->me[j].name, m->me[j].class, m->me[j].semter, m->me[j].stugread.English, m->me[j].stugread.math, m->me[j].stugread.c, m->me[j].stugread.score);
+    }else
+    {
+        printf("查无此人\n");
+    }
+    
+    
+    
 }
 void findallstu(struct manament *m)
 {
@@ -162,6 +216,25 @@ void savestu(struct manament *m)
         }
     }
     fprintf(fp, "%d %s %d %d %d %d %d %d\n", m->me[m->size].id, m->me[m->size].name, m->me[m->size].class, m->me[m->size].semter, m->me[m->size].stugread.English, m->me[m->size].stugread.math, m->me[m->size].stugread.c, m->me[m->size].stugread.score);
+    if (fclose(fp))
+    {
+        printf("文件关闭失败，");
+        exit(0);
+    }
+}
+void save(struct manament *m)
+{
+    FILE *fp;
+    if ((fp = fopen("managent.txt", "w")) == NULL)
+    {
+        printf("文件打开失败");
+        exit(0);
+    }
+    for (int a = 0; a < m->size; a++)
+    {
+        fprintf(fp, "%d %s %d %d %d %d %d %d\n", m->me[a].id, m->me[a].name, m->me[a].class, m->me[a].semter, m->me[a].stugread.English, m->me[a].stugread.math, m->me[a].stugread.c, m->me[a].stugread.score);
+    }
+
     if (fclose(fp))
     {
         printf("文件关闭失败，");
