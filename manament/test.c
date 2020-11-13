@@ -26,7 +26,7 @@ void initstu(struct manament *m);
 void save(struct manament *m);
 void findstu(struct manament *m, int id);
 void addstu(struct manament *m);
-void updatestu(struct manament *m);
+int updatestu(struct manament *m, int id);
 int deletestu(struct manament *m, int id);
 void findallstu(struct manament *m);
 void savestu(struct manament *m);
@@ -59,34 +59,48 @@ void menu1()
         case 2:
             /* code */
             system("CLS");
-            printf("修改学生成绩：");
+            findallstu(&stu);
+            printf("请输入所要修改成绩的学生id: (-1返回上一级)\n");
+            scanf("%d", &id);
+            if (id >= 0)
+            {
+                updatestu(&stu, id);
+            }
+            id = 0;
+
             break;
         case 3:
             system("CLS");
-            printf("查找学生成绩：\n");
-            printf("请输入所要删除的学生id: ");
+            printf("请输入所要查找的学生id: (-1返回上一级)\n");
             scanf("%d", &id);
-            findstu(&stu,id);
+            if (id >= 0)
+            {
+                findstu(&stu, id);
+            }
             id = 0;
             break;
         case 4:
             system("CLS");
             printf("查看所有学生成绩：\n");
-            /* code */
+            findallstu(&stu);
             break;
         case 5:
             system("CLS");
-            printf("删除学生成绩：\n");
-            printf("请输入所要删除的学生id: ");
+            findallstu(&stu);
+            printf("请输入所要删除的学生id: (-1返回上一级)\n");
             scanf("%d", &id);
-            if (deletestu(&stu, id))
+            if (id >= 0)
             {
-                printf("删除成功\n");
+                if (deletestu(&stu, id))
+                {
+                    printf("删除成功\n");
+                }
+                else
+                {
+                    printf("查无此人\n");
+                }
             }
-            else
-            {
-                printf("查无此人\n");
-            }
+
             id = 0;
             /* code */
             break;
@@ -132,30 +146,94 @@ void addstu(struct manament *m)
     printf("请输入学生的班级：\n");
     scanf("%d", &(m->me[m->size].class));
     printf("请输入考试学期：\n");
-    scanf("%d", &(m->me[m->size].semter)); //学期
+    int se;
+    while (scanf("%d", &se), se > 2)
+    {
+        printf("只有两个学期！请重新输入\n");
+    }
+    m->me[m->size].semter = se;
     printf("请输入学生的英语成绩：\n");
-    scanf("%d", &(m->me[m->size].stugread.English)); //英语成绩
+    int en;
+    while (scanf("%d", &en), en > 100)
+    {
+        printf("英语满分只有100！请重新输入\n");
+    }
+    m->me[m->size].stugread.English = en;
     printf("请输入学生的数学成绩：\n");
-    scanf("%d", &(m->me[m->size].stugread.math)); //数学成绩
+    int mt;
+    while (scanf("%d", &mt), mt > 100)
+    {
+        printf("数学满分只有100！请重新输入\n");
+    }
+    m->me[m->size].stugread.math = mt;
     printf("请输入学生的c语言成绩：\n");
-    scanf("%d", &(m->me[m->size].stugread.c));
-    m->me[m->size].stugread.score = m->me[m->size].stugread.c + m->me[m->size].stugread.math + m->me[m->size].stugread.English; //计算总分
+    int c;
+    while (scanf("%d", &c), c > 100)
+    {
+        printf("c语言满分只有100！请重新输入\n");
+    }
+    m->me[m->size].stugread.c = c;
+    m->me[m->size].stugread.score = c + mt + en;
+    // m->me[m->size].stugread.score = m->me[m->size].stugread.c + m->me[m->size].stugread.math + m->me[m->size].stugread.English; //计算总分
     savestu(m);
     m->size++;
     system("CLS"); //清空输出
     printf("添加成功\n");
 }
-void updatestu(struct manament *m)
+int updatestu(struct manament *m, int id)
 {
-}
-int deletestu(struct manament *m, int id)
-{
+
     int j = -1;
     for (int i = 0; i < m->size; i++)
     {
         if (m->me[i].id == id)
         {
-            j = i;
+            j = i; //找到对应id在数组的位置，用j记录，
+            break;
+        }
+    }
+    printf("输入新的英语成绩,如不更改，请输入-1：\n");
+    int Eng;
+    while (scanf("%d", &Eng), Eng > 100)
+    {
+        printf("英语成绩满分100，请检查后再次输入\n");
+    }
+    if (Eng >= 0)
+    {
+        m->me[j].stugread.English = Eng;
+    }
+    printf("输入新的数学成绩,如不更改，请输入-1：\n");
+    int M;
+    while (scanf("%d", &M), M > 100)
+    {
+        printf("英语成绩满分100，请检查后再次输入\n");
+    }
+    if (Eng >= 0)
+    {
+        m->me[j].stugread.English = Eng;
+    }
+    printf("输入新的c语言成绩,如不更改，请输入-1：\n");
+    int C;
+    while (scanf("%d", &C), C > 100)
+    {
+        printf("英语成绩满分100，请检查后再次输入\n");
+    }
+    if (C >= 0)
+    {
+        m->me[j].stugread.c = C;
+    }
+    printf("更改成功！");
+    save(m); //保存删除后的数组
+}
+int deletestu(struct manament *m, int id)
+{
+    findstu(m, id);
+    int j = -1;
+    for (int i = 0; i < m->size; i++)
+    {
+        if (m->me[i].id == id)
+        {
+            j = i; //找到对应id在数组的位置，用j记录，
             break;
         }
     }
@@ -163,10 +241,10 @@ int deletestu(struct manament *m, int id)
     {
         for (j; j < m->size; j++)
         {
-            m->me[j] = m->me[j + 1];
+            m->me[j] = m->me[j + 1]; //将所要删除的id后面的数据迁移一位，达到删除的目的
         }
         m->size--;
-        save(m);
+        save(m); //保存删除后的数组
         return 1;
     }
     return 0;
@@ -178,23 +256,26 @@ void findstu(struct manament *m, int id)
     {
         if (m->me[i].id == id)
         {
-            j = i;
+            j = i; //找到对应id在数组的位置，用j记录，在下方输出
             break;
         }
     }
-    if (j!=-1)
+    if (j != -1)
     {
-        printf("学号：%-4d 性名：%-4s 班级：%-3d 学期%-3d 英语%-3d 数学%-3d c语言：%-3d 总分：%-3d\n ", m->me[j].id, m->me[j].name, m->me[j].class, m->me[j].semter, m->me[j].stugread.English, m->me[j].stugread.math, m->me[j].stugread.c, m->me[j].stugread.score);
-    }else
+        printf("学号:%-4d 性名:%-4s 班级：%-3d 学期:%-3d 英语:%-3d 数学:%-3d c语言:%-3d 总分:%-3d\n ", m->me[j].id, m->me[j].name, m->me[j].class, m->me[j].semter, m->me[j].stugread.English, m->me[j].stugread.math, m->me[j].stugread.c, m->me[j].stugread.score);
+    }
+    else
     {
         printf("查无此人\n");
     }
-    
-    
-    
 }
 void findallstu(struct manament *m)
 {
+    printf("    学号   性名   班级   学期   英语   数学   c语言   总分\n");
+    for (int j = 0; j < m->size; j++) //循环结构体，输出
+    {
+        printf("%7d%9s%5d%7d%8d%7d%8d%7d\n", m->me[j].id, m->me[j].name, m->me[j].class, m->me[j].semter, m->me[j].stugread.English, m->me[j].stugread.math, m->me[j].stugread.c, m->me[j].stugread.score);
+    }
 }
 void savestu(struct manament *m)
 {
