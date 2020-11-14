@@ -24,6 +24,7 @@ struct manament
 };
 void initstu(struct manament *m);
 void save(struct manament *m);
+void findclassstu(struct manament *m, char class[20]);
 int ishaved(struct manament *m, int id);
 void findstu(struct manament *m, int id);
 void addstu(struct manament *m);
@@ -47,7 +48,8 @@ void menu1() //主界面，负责人：王豪杰
         printf("   3：查找学生成绩\n");
         printf("   4：查看所有学生成绩\n");
         printf("   5：删除学生成绩\n");
-        printf("   6：退出系统\n");
+        printf("   6：按班级查找学生成绩\n");
+        printf("   7：退出系统\n");
         printf("请选择操作数来完成你的操作：");
         int a;
         scanf("%d", &a);
@@ -110,6 +112,13 @@ void menu1() //主界面，负责人：王豪杰
             /* code */
             break;
         case 6:
+            system("CLS"); //system函数清空屏幕，
+            printf("请输入班级：\n");
+            char cla[20];
+            scanf("%s", cla);
+            findclassstu(&stu, cla);
+            break;
+        case 7:
             system("CLS"); //system函数清空屏幕，
             printf("谢谢使用，欢迎下次光临：");
             flag = 0; //flag=0,不满足循环条件，跳出大循环，
@@ -312,10 +321,24 @@ void findstu(struct manament *m, int id) //完成人：董辰宇
 }
 void findallstu(struct manament *m) //显示所有的学生信息，完成人：董辰宇
 {
-    printf("    学号   姓名   班级   学期   英语   数学   C语言   总分\n"); //打印表头
-    for (int j = 0; j < m->size; j++)                                       //循环结构体，输出
+    printf("学号\t姓名\t班级\t学期\t英语\t数学\tC语言\t总分\n"); //打印表头
+                                                
+    for (int j = 0; j < m->size; j++)                            //循环结构体，输出
     {
-        printf("%7d%9s%5s%7d%8d%7d%8d%7d\n", m->me[j].id, m->me[j].name, m->me[j].class, m->me[j].semter, m->me[j].stugread.English, m->me[j].stugread.math, m->me[j].stugread.c, m->me[j].stugread.score);
+        printf("%d\t%s\t%s\t%d\t%d\t%d\t%d\t%d\n", m->me[j].id, m->me[j].name, m->me[j].class, m->me[j].semter, m->me[j].stugread.English, m->me[j].stugread.math, m->me[j].stugread.c, m->me[j].stugread.score);
+    }
+}
+void findclassstu(struct manament *m, char class[20])
+{
+    printf("学号\t姓名\t班级\t学期\t英语\t数学\tC语言\t总分\n"); //打印表头
+    for (int j = 0; j < m->size; j++)
+    {
+        int a;
+        a = strcmp(m->me[j].class, class);
+        if (a == 0)
+        {
+            printf("%d\t%s\t%s\t%d\t%d\t%d\t%d\t%d\n", m->me[j].id, m->me[j].name, m->me[j].class, m->me[j].semter, m->me[j].stugread.English, m->me[j].stugread.math, m->me[j].stugread.c, m->me[j].stugread.score);
+        }
     }
 }
 void savestu(struct manament *m) //完成人：王豪杰
