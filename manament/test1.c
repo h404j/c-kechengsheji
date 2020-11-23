@@ -14,7 +14,7 @@ struct student
     int id;
     char name[10];
     char class[20];
-    int semter;
+    char semter[20];
     struct gread stugread;
 };
 struct manament
@@ -24,12 +24,12 @@ struct manament
 };
 void initstu(struct manament *m);
 void save(struct manament *m);
-void findclassstu(struct manament *m, char class[20]);
-void findscoreorder(struct manament *m, char class[20], char course[20]);
-void findscoreEorder(struct manament *m, char class[20]);
-void findscoreSorder(struct manament *m, char class[20]);
-void findscoreMorder(struct manament *m, char class[20]);
-void findscoreCorder(struct manament *m, char class[20]);
+void findclassstu(struct manament *m, char class[20], int see);
+void findscoreorder(struct manament *m, char class[20], char course[20], int see);
+void findscoreEorder(struct manament *m, char class[20], int see);
+void findscoreSorder(struct manament *m, char class[20], int see);
+void findscoreMorder(struct manament *m, char class[20], int see);
+void findscoreCorder(struct manament *m, char class[20], int see);
 int ishaved(struct manament *m, int id);
 void findstu(struct manament *m, int id);
 void addstu(struct manament *m);
@@ -128,8 +128,15 @@ void menu1() //Ö÷½çÃæ£¬¸ºÔğÈË£ºÍõºÀ½Ü
             system("CLS"); //systemº¯ÊıÇå¿ÕÆÁÄ»£¬
             printf("ÇëÊäÈë°à¼¶£º\n");
             char cla[20];
+
             scanf("%s", cla);
-            findclassstu(&stu, cla);
+            int see;
+            do
+            {
+                printf("ÇëÊäÈëÑ§ÆÚ £¨µÚÒ»Ñ§ÆÚÊäÈë1£¬µÚ¶ş¡¤Ñ§ÆÚÊäÈë2£©£º\n");
+                scanf("%d", &see);
+            } while (see < 1 || see > 2);
+            findclassstu(&stu, cla, see);
             break;
         case 0:
             system("CLS"); //systemº¯ÊıÇå¿ÕÆÁÄ»£¬
@@ -141,11 +148,17 @@ void menu1() //Ö÷½çÃæ£¬¸ºÔğÈË£ºÍõºÀ½Ü
             printf("½µĞòÊä³öÄ³°àÄ³¿Î³ÌµÄ³É¼¨¡£\n");
             printf("ÇëÊäÈë°à¼¶\n");
             char clas[20];
-            scanf("%s", clas);
+            int see1=0;
+          scanf("%s", clas);
+            do
+            {
+                printf("ÇëÊäÈëÑ§ÆÚ £¨µÚÒ»Ñ§ÆÚÊäÈë1£¬µÚ¶ş¡¤Ñ§ÆÚÊäÈë2£©£º\n");
+                scanf("%d", &see1);
+            } while (see1 < 1 || see1 > 2);
             printf("ÇëÊäÈëĞèÒªÅÅĞòµÄ¿Î³ÌÃû³Æ£¬Ò²¿É°´ÊäÈë¡°×Ü·Ö¡±£¬°´×Ü·ÖÅÅĞò£¬ÊäÈë¿Î³ÌÃûµÄ¿ÉÒÔÎªÖĞÎÄÈ«³Æ¡¢Ó¢ÎÄÈ«³Æ»òÕßÓ¢ÎÄµÄÊ××ÖÄ¸£¨´óĞ¡Ğ´¶¼¿ÉÒÔ£©\n");
             char co[20];
             scanf("%s", co);
-            findscoreorder(&stu, clas, co);
+            findscoreorder(&stu, clas, co, see1);
             break;
         default:
             system("CLS"); //systemº¯ÊıÇå¿ÕÆÁÄ»£¬
@@ -177,7 +190,7 @@ void initstu(struct manament *m) //³õÊ¼»¯Êı×éº¯Êı£¬Íê³ÉÈË£ºÍõºÀ½Ü
 void addstu(struct manament *m) //Ìí¼Óº¯Êı£¬Íê³ÉÈË£ººîº½Óî
 {
     printf("Ìí¼ÓÑ§Éú³É¼¨£º\n");
-    printf("ÇëÊäÈëÑ§ÉúÑ§ºÅ£º\n");
+    printf("ÇëÊäÈëÑ§ÉúÑ§ºÅ(ËÄÎ»Êı×Ö))£º\n");
     int id, tu;
     while (scanf("%d", &id))
     {
@@ -206,15 +219,24 @@ void addstu(struct manament *m) //Ìí¼Óº¯Êı£¬Íê³ÉÈË£ººîº½Óî
     m->me[m->size].id = id; //mÊÇ´«ÈëµÄ½á¹¹Ö¸Õë£¬m->me[m->size]ÊÇmanament½á¹¹ÖĞ¶¨ÒåµÄstudent½á¹¹Êı×é£¬m->sizeÊÇµ±Ç°ÏµÍ³ÖĞ±£´æµÄÑ§ÉúĞÅÏ¢µÄÊıÄ¿ ,m->me[m->size].semterÊÇmanament½á¹¹ÖĞ¶¨ÒåµÄstudent½á¹¹Êı×éÖĞ¶¨ÒåµÄÑ§ÆÚ
     printf("ÇëÊäÈëÑ§ÉúĞÕÃû\n");
     scanf("%s", m->me[m->size].name); // //mÊÇ´«ÈëµÄ½á¹¹Ö¸Õë£¬m->me[m->size]ÊÇmanament½á¹¹ÖĞ¶¨ÒåµÄstudent½á¹¹Êı×é£¬m->sizeÊÇµ±Ç°ÏµÍ³ÖĞ±£´æµÄÑ§ÉúĞÅÏ¢µÄÊıÄ¿ ,m->me[m->size].semterÊÇmanament½á¹¹ÖĞ¶¨ÒåµÄstudent½á¹¹Êı×éÖĞ¶¨ÒåµÄÑ§ÆÚ
-    printf("ÇëÊäÈëÑ§ÉúµÄ°à¼¶£º\n");
+    printf("ÇëÊäÈëÑ§ÉúµÄ°à¼¶£¨×¨Òµ+°à¼¶£©£º\n");
     scanf("%s", (m->me[m->size].class)); //mÊÇ´«ÈëµÄ½á¹¹Ö¸Õë£¬m->me[m->size]ÊÇmanament½á¹¹ÖĞ¶¨ÒåµÄstudent½á¹¹Êı×é£¬m->sizeÊÇµ±Ç°ÏµÍ³ÖĞ±£´æµÄÑ§ÉúĞÅÏ¢µÄÊıÄ¿ ,m->me[m->size].semterÊÇmanament½á¹¹ÖĞ¶¨ÒåµÄstudent½á¹¹Êı×éÖĞ¶¨ÒåµÄÑ§ÆÚ
-    printf("ÇëÊäÈë¿¼ÊÔÑ§ÆÚ£º\n");
-    int se;                                     //Ñ§ÆÚ
-    while (scanf("%d", &se), se > 2 || se <= 0) //ÅĞ¶ÏÊäÈëµÄÊıÊÇ·ñ·ûºÏ³£¹æ
+    printf("ÇëÊäÈë¿¼ÊÔÑ§ÆÚ£¨µÚÒ»Ñ§ÆÚÊäÈë1£¬µÚ¶şÑ§ÆÚÊäÈë2£©£º\n");
+    int se;
+    char a[20];                                 //Ñ§ÆÚ
+    while (scanf("%d", &se), se>2 || se<1) //ÅĞ¶ÏÊäÈëµÄÊıÊÇ·ñ·ûºÏ³£¹æ
     {
-        printf("ÊäÈë´íÎó£¡ÇëÖØĞÂÊäÈë\n");
+        printf("ÇëÖØĞÂÊäÈë\n");
     }
-    m->me[m->size].semter = se; //mÊÇ´«ÈëµÄ½á¹¹Ö¸Õë£¬m->me[m->size]ÊÇmanament½á¹¹ÖĞ¶¨ÒåµÄstudent½á¹¹Êı×é£¬m->sizeÊÇµ±Ç°ÏµÍ³ÖĞ±£´æµÄÑ§ÉúĞÅÏ¢µÄÊıÄ¿ ,m->me[m->size].semterÊÇmanament½á¹¹ÖĞ¶¨ÒåµÄstudent½á¹¹Êı×éÖĞ¶¨ÒåµÄÑ§ÆÚ
+    if (se == 1)
+    {
+        strcpy(m->me[m->size].semter, "µÚÒ»Ñ§ÆÚ");
+    }
+    else if (se == 2)
+    {
+        strcpy(m->me[m->size].semter, "µÚ¶şÑ§ÆÚ");
+    }
+    //mÊÇ´«ÈëµÄ½á¹¹Ö¸Õë£¬m->me[m->size]ÊÇmanament½á¹¹ÖĞ¶¨ÒåµÄstudent½á¹¹Êı×é£¬m->sizeÊÇµ±Ç°ÏµÍ³ÖĞ±£´æµÄÑ§ÉúĞÅÏ¢µÄÊıÄ¿ ,m->me[m->size].semterÊÇmanament½á¹¹ÖĞ¶¨ÒåµÄstudent½á¹¹Êı×éÖĞ¶¨ÒåµÄÑ§ÆÚ
     printf("ÇëÊäÈëÑ§ÉúµÄÓ¢Óï³É¼¨£º\n");
     int en;                                      //Ó¢Óï·ÖÊı
     while (scanf("%d", &en), en > 100 || en < 0) //ÅĞ¶ÏÓ¢Óï³É¼¨ÊäÈëÊÇ·ñÔÚ·¶Î§ÄÚ
@@ -245,7 +267,6 @@ void addstu(struct manament *m) //Ìí¼Óº¯Êı£¬Íê³ÉÈË£ººîº½Óî
 }
 int updatestu(struct manament *m, int id) //¸üĞÂ³É¼¨º¯Êı£¬Íê³ÉÈË£ºÀîº¯ÀÚ
 {
-    findstu(m, id); //µ÷ÓÃfind()º¯Êı£¬mÊÇ´«ÈëµÄÏÔÊ¾Òª¸ü¸ÄµÄÑ§ÉúµÄĞÅÏ¢£¬ÈİÒ×²Ù×÷£¬
     int j = -1;
     for (int i = 0; i < m->size; i++)
     {
@@ -255,16 +276,17 @@ int updatestu(struct manament *m, int id) //¸üĞÂ³É¼¨º¯Êı£¬Íê³ÉÈË£ºÀîº¯ÀÚ
             break;
         }
     }
-    if (j==-1)
+    if (j == -1)
     {
-        /* code */
+        printf("²éÎŞ´ËÈË\n");
+        return 0;
     }
-    
+    findstu(m, id); //µ÷ÓÃfind()º¯Êı£¬mÊÇ´«ÈëµÄÏÔÊ¾Òª¸ü¸ÄµÄÑ§ÉúµÄĞÅÏ¢£¬ÈİÒ×²Ù×÷£¬
     printf("ÊäÈëĞÂµÄÓ¢Óï³É¼¨,Èç²»¸ü¸Ä£¬ÇëÊäÈë-1£º\n");
     int Eng;
     while (scanf("%d", &Eng), Eng > 100) //ÅĞ¶Ï¸ü¸ÄµÄÓ¢Óï³É¼¨ÊÇ·ñ³¬³ö·¶Î§£¬ÈôÊ§Îó½«³É¼¨ÊäÎª¸ºÊı£¬ÏµÍ³½«²»×ö¸ü¸Ä
     {
-        printf("Ó¢Óï³É¼¨Âú·Ö100£¬Çë¼ì²éºóÔÙ´ÎÊäÈë\n");
+        printf("Ó¢Óï³É¼¨Âú·Ö100£¬Çë¼ì²éºóÔÙ´ÎÊäÈë,Èç²»¸ü¸Ä£¬ÇëÊäÈë-1£º\n");
     }
     if (Eng >= 0)
     {
@@ -274,7 +296,7 @@ int updatestu(struct manament *m, int id) //¸üĞÂ³É¼¨º¯Êı£¬Íê³ÉÈË£ºÀîº¯ÀÚ
     int M;
     while (scanf("%d", &M), M > 100) //ÅĞ¶Ï¸ü¸ÄµÄ³É¼¨ÊÇ·ñ³¬³ö·¶Î§£¬ÈôÊ§Îó½«³É¼¨ÊäÎª¸ºÊı£¬ÏµÍ³½«²»×ö¸ü¸Ä
     {
-        printf("ÊıÑ§³É¼¨Âú·Ö100£¬Çë¼ì²éºóÔÙ´ÎÊäÈë\n");
+        printf("ÊıÑ§³É¼¨Âú·Ö100£¬Çë¼ì²éºóÔÙ´ÎÊäÈë,Èç²»¸ü¸Ä£¬ÇëÊäÈë-1£º\n");
     }
     if (M >= 0)
     {
@@ -285,12 +307,13 @@ int updatestu(struct manament *m, int id) //¸üĞÂ³É¼¨º¯Êı£¬Íê³ÉÈË£ºÀîº¯ÀÚ
     while (scanf("%d", &C), C > 100)
     //ÅĞ¶Ï¸ü¸ÄµÄ³É¼¨ÊÇ·ñ³¬³ö·¶Î§£¬ÈôÊ§Îó½«³É¼¨ÊäÎª¸ºÊı£¬ÏµÍ³½«²»×ö¸ü¸Ä
     {
-        printf("CÓïÑÔ³É¼¨Âú·Ö100£¬£¬Çë¼ì²éºóÔÙ´ÎÊäÈë\n");
+        printf("CÓïÑÔ³É¼¨Âú·Ö100£¬£¬Çë¼ì²éºóÔÙ´ÎÊäÈë,Èç²»¸ü¸Ä£¬ÇëÊäÈë-1£º\n");
     }
     if (C >= 0)
     {
         m->me[j].stugread.c = C; //mÊÇ´«ÈëµÄ½á¹¹Ö¸Õë£¬m->me[m->size]ÊÇmanament½á¹¹ÖĞ¶¨ÒåµÄstudent½á¹¹Êı×é£¬m->sizeÊÇµ±Ç°ÏµÍ³ÖĞ±£´æµÄÑ§ÉúĞÅÏ¢µÄÊıÄ¿ ,m->me[m->size].cÊÇmanament½á¹¹ÖĞ¶¨ÒåµÄstudent½á¹¹Êı×éÖĞ¶¨ÒåµÄcÓïÑÔ³É¼¨
     }
+    m->me[j].stugread.score = m->me[j].stugread.c + m->me[j].stugread.math + m->me[j].stugread.English; //¼ÆËã×Ü·Ö
     printf("¸ü¸Ä³É¹¦£¡\n");
     save(m); //±£´æÉ¾³ıºóµÄÊı×é
 }
@@ -305,9 +328,9 @@ int deletestu(struct manament *m, int id) //¸ù¾İidÉ¾³ıÑ§ÉúĞÅÏ¢£¬Íê³ÉÈË£º¹ùöÎÓî
             break; //ÕÒµ½Õâ¸öidºóÌø³öÑ­»·
         }
     }
-    if (j==-1)
+    if (j == -1)
     {
-    return 0;
+        return 0;
     }
     printf("ÒªÉ¾³ıµÄÑ§ÉúĞÅÏ¢ÈçÏÂ£º\n");
     findstu(m, id); //ÏÔÊ¾ÒªÉ¾³ıµÄÑ§ÉúĞÅÏ¢£¬·ÀÖ¹ÎóÉ¾£¬´íÉ¾
@@ -332,7 +355,7 @@ int deletestu(struct manament *m, int id) //¸ù¾İidÉ¾³ıÑ§ÉúĞÅÏ¢£¬Íê³ÉÈË£º¹ùöÎÓî
     }
     return -1; //²»½øĞĞÉ¾³ı·µ»Ø-1
 }
-void findstu(struct manament *m, int id) //Íê³ÉÈË£º¶­³½Óî
+void findstu(struct manament *m, int id) //Íê³ÉÈË£º
 {
     int j = -1;
     for (int i = 0; i < m->size; i++) //Ñ­»·£¬±éÀúÊı×é£¬²éÕÒÊÇ·ñÓĞÕâ¸öid
@@ -345,7 +368,7 @@ void findstu(struct manament *m, int id) //Íê³ÉÈË£º¶­³½Óî
     }
     if (j != -1) //ÅĞ¶ÏÊÇ·ñÕÒµ½ÁË¶ÔÓ¦id
     {
-        printf("Ñ§ºÅ:%-4d ĞÕÃû:%-4s °à¼¶£º%-3s Ñ§ÆÚ:%-3d Ó¢Óï:%-3d ÊıÑ§:%-3d CÓïÑÔ:%-3d ×Ü·Ö:%-3d\n ", m->me[j].id, m->me[j].name, m->me[j].class, m->me[j].semter, m->me[j].stugread.English, m->me[j].stugread.math, m->me[j].stugread.c, m->me[j].stugread.score); //Êä³ö¶ÔÓ¦idµÄÑ§ÉúĞÅÏ¢
+        printf("Ñ§ºÅ:\t%d ĞÕÃû:\t%s °à¼¶£º%s Ñ§ÆÚ:%s Ó¢Óï:\t%d ÊıÑ§:\t%d CÓïÑÔ:\t%d ×Ü·Ö:\t%d\n ", m->me[j].id, m->me[j].name, m->me[j].class, m->me[j].semter, m->me[j].stugread.English, m->me[j].stugread.math, m->me[j].stugread.c, m->me[j].stugread.score); //Êä³ö¶ÔÓ¦idµÄÑ§ÉúĞÅÏ¢
     }
     else
     {
@@ -354,25 +377,42 @@ void findstu(struct manament *m, int id) //Íê³ÉÈË£º¶­³½Óî
 }
 void findallstu(struct manament *m) //ÏÔÊ¾ËùÓĞµÄÑ§ÉúĞÅÏ¢£¬Íê³ÉÈË£º¶­³½Óî
 {
-    printf("Ñ§ ºÅ\tĞÕÃû\t   °à   ¼¶\tÑ§ÆÚ\tÓ¢Óï\tÊıÑ§\tCÓïÑÔ\t×Ü·Ö\n"); //´òÓ¡±íÍ·
+    printf("Ñ§ ºÅ\tĞÕÃû\t   °à   ¼¶\t  Ñ§  ÆÚ\tÓ¢Óï\tÊıÑ§\tCÓïÑÔ\t×Ü·Ö\n"); //´òÓ¡±íÍ·
 
     for (int j = 0; j < m->size; j++) //Ñ­»·½á¹¹Ìå£¬Êä³ö
     {
-        printf("%d\t%s\t %s\t %d\t%d\t%d\t%d\t%d\n", m->me[j].id, m->me[j].name, m->me[j].class, m->me[j].semter, m->me[j].stugread.English, m->me[j].stugread.math, m->me[j].stugread.c, m->me[j].stugread.score);
+        printf("%d\t%s\t %s\t %s\t%d\t%d\t%d\t%d\n", m->me[j].id, m->me[j].name, m->me[j].class, m->me[j].semter, m->me[j].stugread.English, m->me[j].stugread.math, m->me[j].stugread.c, m->me[j].stugread.score);
     }
 }
-void findclassstu(struct manament *m, char class[20])
+void findclassstu(struct manament *m, char class[20], int see)
 {
-    printf("Ñ§ºÅ\tĞÕÃû\t°à¼¶\tÑ§ÆÚ\tÓ¢Óï\tÊıÑ§\tCÓïÑÔ\t×Ü·Ö\tÅÅÃû\n"); //´òÓ¡±íÍ·
+    printf("Ñ§ ºÅ\tĞÕÃû\t   °à   ¼¶\t Ñ§  ÆÚ\tÓ¢Óï\tÊıÑ§\tCÓïÑÔ\t×Ü·Ö\n"); //´òÓ¡±íÍ·
+    // printf("Ñ§ ºÅ\tĞÕÃû\t   °à   ¼¶\tÑ§  ÆÚ\tÓ¢Óï\tÊıÑ§\tCÓïÑÔ\t×Ü·Ö\tÅÅÃû\n"); //´òÓ¡±íÍ·
     int ii = 0;
     for (int j = 0; j < m->size; j++)
     {
-        int a;
+        int a=5;
+        int b=6;
+        int c=6;
         a = strcmp(m->me[j].class, class);
-        if (a == 0)
+        if (see == 1)
+        {
+
+            b = strcmp(m->me[j].semter, "µÚÒ»Ñ§ÆÚ");
+        }
+        else if (see == 2)
+        {
+            c = strcmp(m->me[j].semter, "µÚ¶şÑ§ÆÚ");
+        }
+
+        {
+            /* code */
+        }
+
+        if (a == 0 && b == 0 || a == 0 && c == 0)
         {
             ii++;
-            printf("%d\t%s\t%s\t%d\t%d\t%d\t%d\t%d\t%d\n", m->me[j].id, m->me[j].name, m->me[j].class, m->me[j].semter, m->me[j].stugread.English, m->me[j].stugread.math, m->me[j].stugread.c, m->me[j].stugread.score, ii);
+            printf("%d\t%s\t %s \t %s\t%d\t%d\t%d\t%d\t%d\n", m->me[j].id, m->me[j].name, m->me[j].class, m->me[j].semter, m->me[j].stugread.English, m->me[j].stugread.math, m->me[j].stugread.c, m->me[j].stugread.score, ii);
         }
     }
 }
@@ -395,7 +435,7 @@ void savestu(struct manament *m) //Íê³ÉÈË£ºÍõºÀ½Ü
             exit(0);                //ÍË³öÏµÍ³
         }
     }
-    fprintf(fp, "%d %s %s %d %d %d %d %d\n", m->me[m->size].id, m->me[m->size].name, m->me[m->size].class, m->me[m->size].semter, m->me[m->size].stugread.English, m->me[m->size].stugread.math, m->me[m->size].stugread.c, m->me[m->size].stugread.score); //fprint()º¯Êı½«Êı¾İĞ´ÈëÎÄ¼ş
+    fprintf(fp, "%d %s %s %s %d %d %d %d\n", m->me[m->size].id, m->me[m->size].name, m->me[m->size].class, m->me[m->size].semter, m->me[m->size].stugread.English, m->me[m->size].stugread.math, m->me[m->size].stugread.c, m->me[m->size].stugread.score); //fprint()º¯Êı½«Êı¾İĞ´ÈëÎÄ¼ş
     if (fclose(fp))                                                                                                                                                                                                                                         //ÎÄ¼ş¹Ø±Õ
     {
         printf("ÎÄ¼ş¹Ø±ÕÊ§°Ü£¬"); //ÎÄ¼ş´ò¿ªÊ§°ÜÌáÊ¾
@@ -412,7 +452,7 @@ void save(struct manament *m) //Íê³ÉÈË£ºÍõºÀ½Ü
     }
     for (int a = 0; a < m->size; a++) //°Ñ½á¹¹Êı×éÖØĞÂ±£´æÒ»±é
     {
-        fprintf(fp, "%d %s %s %d %d %d %d %d\n", m->me[a].id, m->me[a].name, m->me[a].class, m->me[a].semter, m->me[a].stugread.English, m->me[a].stugread.math, m->me[a].stugread.c, m->me[a].stugread.score);
+        fprintf(fp, "%d %s %s %s %d %d %d %d\n", m->me[a].id, m->me[a].name, m->me[a].class, m->me[a].semter, m->me[a].stugread.English, m->me[a].stugread.math, m->me[a].stugread.c, m->me[a].stugread.score);
         //fprintf()º¯Êı¸ñÊ½»¯Ğ´½øÎÄ¼ş
     }
 
@@ -437,7 +477,7 @@ void readstu(struct manament *m) //³õÊ¼»¯¶ÁÈ¡ÎÄ¼ş£¬³õÊ¼»¯Êı×é£¬¸ºÔğÈË£ºÍõºÀ½Ü
         //ÍË³öÏµÍ³
         fp = fopen("managent.txt", "r");
     }
-    while (fscanf(fp, "%d %s %s %d %d %d %d %d", &(m->me[m->size].id), m->me[m->size].name, &(m->me[m->size].class), &(m->me[m->size].semter), &(m->me[m->size].stugread.English), &(m->me[m->size].stugread.math), &(m->me[m->size].stugread.c), &(m->me[m->size].stugread.score)) > 0)
+    while (fscanf(fp, "%d %s %s %s %d %d %d %d", &(m->me[m->size].id), m->me[m->size].name, &(m->me[m->size].class), &(m->me[m->size].semter), &(m->me[m->size].stugread.English), &(m->me[m->size].stugread.math), &(m->me[m->size].stugread.c), &(m->me[m->size].stugread.score)) > 0)
     //ÅĞ¶ÏÊÇ·ñ¶Áµ½×îºóÒ»Î»£¬Ã¿¶ÁÒ»Î»±£´æÔÚ½á¹¹Êı×éÒ»Î»
     {
         m->size++;
@@ -469,7 +509,7 @@ int ishaved(struct manament *m, int id) //ÅĞ¶ÏidÊÇ·ñÒÑ¾­´æÔÚ£¬´æÔÚ·µ»Ø1£¬²»´æÔÚ·
         return 1;
     }
 }
-void findscoreorder(struct manament *m, char class[20], char course[20])
+void findscoreorder(struct manament *m, char class[20], char course[20],int see)
 {
     int flag = 0;
     if (strcmp(course, "English") == 0 || strcmp(course, "english") == 0 || strcmp(course, "Ó¢Óï") == 0 || strcmp(course, "Íâ") == 0 || strcmp(course, "E") == 0 || strcmp(course, "e") == 0)
@@ -491,23 +531,23 @@ void findscoreorder(struct manament *m, char class[20], char course[20])
     switch (flag)
     {
     case 1:
-        findscoreEorder(m, class);
+        findscoreEorder(m, class,see);
         break;
     case 2:
-        findscoreMorder(m, class);
+        findscoreMorder(m, class,see);
         break;
     case 3:
-        findscoreCorder(m, class);
+        findscoreCorder(m, class,see);
         break;
     case 4:
-        findscoreSorder(m, class);
+        findscoreSorder(m, class,see);
         break;
     default:
         printf("Ã»ÓĞÕâ¸ö¿Î³Ì\n");
         break;
     }
 }
-void findscoreEorder(struct manament *m, char class[20])
+void findscoreEorder(struct manament *m, char class[20], int see)
 {
     for (int i = 0; i < m->size - 1; i++)
     {
@@ -522,10 +562,10 @@ void findscoreEorder(struct manament *m, char class[20])
             }
         }
     }
-    findclassstu(m, class);//´òÓ¡Êı¾İ
-    save(m);//±£´æÊı¾İ
+    findclassstu(m, class, see); //´òÓ¡Êı¾İ
+    save(m);                     //±£´æÊı¾İ
 }
-void findscoreMorder(struct manament *m, char class[20])
+void findscoreMorder(struct manament *m, char class[20], int see)
 {
     for (int i = 0; i < m->size - 1; i++)
     {
@@ -540,17 +580,17 @@ void findscoreMorder(struct manament *m, char class[20])
             }
         }
     }
-    findclassstu(m, class); //´òÓ¡Êı¾İ
+    findclassstu(m, class, see); //´òÓ¡Êı¾İ
     save(m);
     //±£´æÊı¾İ
 }
-void findscoreCorder(struct manament *m, char class[20])
+void findscoreCorder(struct manament *m, char class[20], int see)
 {
     for (int i = 0; i < m->size - 1; i++)
     {
         for (int j = 0; j < m->size - 1; j++)
         {
-            if (m->me[j].stugread.c < m->me[j + 1].stugread.c)//¸ù¾İ³É¼¨Ã°ÅİÅÅĞò
+            if (m->me[j].stugread.c < m->me[j + 1].stugread.c) //¸ù¾İ³É¼¨Ã°ÅİÅÅĞò
             {
                 struct student st;
                 st = m->me[j];
@@ -559,7 +599,7 @@ void findscoreCorder(struct manament *m, char class[20])
             }
         }
     }
-    findclassstu(m, class); //´òÓ¡Êı¾İ
+    findclassstu(m, class, see); //´òÓ¡Êı¾İ
     save(m);
     //±£´æÊı¾İ
 }
@@ -581,7 +621,7 @@ void findscoreCorder(struct manament *m, char class[20])
 //     findclassstu(m, class);
 //     save(m);
 // }
-void findscoreSorder(struct manament *m, char class[20])
+void findscoreSorder(struct manament *m, char class[20], int see)
 {
     for (int i = 0; i < m->size - 1; i++)
     {
@@ -596,7 +636,7 @@ void findscoreSorder(struct manament *m, char class[20])
             }
         }
     }
-    findclassstu(m, class); //´òÓ¡Êı¾İ
+    findclassstu(m, class, see); //´òÓ¡Êı¾İ
     save(m);
     //±£´æÊı¾İ
 }

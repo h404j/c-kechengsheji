@@ -59,7 +59,6 @@ int main()
     struct manament *m;
     m->me[1].id = 0;
     struct manament x;
-    x=m;
     // struct manament ma;
     // initstu(&ma);
     // readstu(&ma);
